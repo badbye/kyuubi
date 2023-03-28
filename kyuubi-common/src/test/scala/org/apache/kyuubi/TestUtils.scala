@@ -75,4 +75,12 @@ object TestUtils {
     println(FlipTable.of(headers, data.result().toArray))
     // scalastyle:on println
   }
+
+  def testFindLocalInetAddress(): Unit = {
+    val localInetAddress = Utils.findLocalInetAddress
+    if (localInetAddress != null) {
+      // scalastyle:off println
+      println(localInetAddress.getHostAddress)
+    }
+  }
 }

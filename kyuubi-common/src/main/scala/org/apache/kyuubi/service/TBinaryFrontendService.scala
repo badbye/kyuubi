@@ -82,7 +82,8 @@ abstract class TBinaryFrontendService(name: String)
       // TCP Server
       server = Some(new TThreadPoolServer(args))
       server.foreach(_.setServerEventHandler(new FeTServerEventHandler))
-      info(s"Initializing $name on ${serverAddr.getHostName}:${serverSocket.getLocalPort} with" +
+      info(s"Initializing $name on ${serverAddr.getHostName}/${serverAddr.getHostAddress}:" +
+        s"${serverSocket.getLocalPort} with" +
         s" [$minThreads, $maxThreads] worker threads")
     } catch {
       case e: Throwable =>

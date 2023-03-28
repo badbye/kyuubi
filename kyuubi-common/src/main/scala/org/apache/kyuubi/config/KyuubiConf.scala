@@ -1303,6 +1303,14 @@ object KyuubiConf {
       .booleanConf
       .createWithDefault(true)
 
+  val ENGINE_CONNECTION_URL_USE_NIC: OptionalConfigEntry[String] =
+    buildConf("kyuubi.engine.connection.url.use.nic")
+      .doc("Set the name of NIC(NetworkInterface) to be used to find the host address of " +
+        "Spark Engine. Use it only if you have multiple NICs.")
+      .version("1.6.1")
+      .stringConf
+      .createOptional
+
   val FRONTEND_CONNECTION_URL_USE_HOSTNAME: ConfigEntry[Boolean] =
     buildConf("kyuubi.frontend.connection.url.use.hostname")
       .doc("When true, frontend services prefer hostname, otherwise, ip address. Note that, " +

@@ -52,8 +52,12 @@ abstract class TFrontendService(name: String)
 
   protected def serverHost: Option[String]
   protected def portNum: Int
-  protected lazy val serverAddr: InetAddress =
-    serverHost.map(InetAddress.getByName).getOrElse(Utils.findLocalInetAddress)
+
+  private lazy val interfaceAddr = Utils.findInetAddressByInterfaceName(conf)
+  protected lazy val serverAddr: InetAddress = interfaceAddr match {
+    case null => serverHost.map(InetAddress.getByName).getOrElse(Utils.findLocalInetAddress)
+    case _ => interfaceAddr
+  }
   protected lazy val serverSocket = new ServerSocket(portNum, -1, serverAddr)
   protected lazy val actualPort: Int = serverSocket.getLocalPort
   protected lazy val authFactory: KyuubiAuthenticationFactory =

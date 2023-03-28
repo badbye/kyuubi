@@ -218,6 +218,31 @@ object Utils extends Logging {
     address
   }
 
+  def findInetAddressByInterfaceName(conf: KyuubiConf): InetAddress = {
+    val nic = conf.get(KyuubiConf.ENGINE_CONNECTION_URL_USE_NIC)
+    nic match {
+      case Some(interfaceName) => info(s"Looking for interface $interfaceName")
+        val interfaces = NetworkInterface.getNetworkInterfaces
+        var matchedAddr: InetAddress = null
+        while (interfaces.hasMoreElements) {
+          val iface = interfaces.nextElement
+          info(s"Interface ${iface.getName}:")
+          if (iface.getName == interfaceName) {
+            val addresses = iface.getInetAddresses
+            while (addresses.hasMoreElements) {
+              val addr = addresses.nextElement
+              info(s"  getHostAddress: ${addr.getHostAddress}")
+              if (addr.isInstanceOf[Inet4Address]) {
+                matchedAddr = addr
+              }
+            }
+          }
+        }
+        matchedAddr
+      case None => null
+    }
+  }
+
   /**
    * return date of format yyyyMMdd
    */
